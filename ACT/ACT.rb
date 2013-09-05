@@ -3,5 +3,3 @@ n = gets.chomp.to_i
   l = gets.chomp
   puts l[l.length-1]
 end
-
-
