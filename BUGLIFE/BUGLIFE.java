@@ -21,22 +21,22 @@ class BUGLIFE{
 			boolean status = true;
 
 			LOOP:for(int z = 1; z <= bugs; z++){
-            if(array[z] == 0){
-               array[z] = 1;
-            }
+        			if(array[z] == 0){
+               				array[z] = 1;
+            			}
 				for(int c = 1; c <= bugs; c++){
 					if(graph[z][c]){
-                  if(array[c] == 0){
-                     if(array[z] == 1){
-                        array[c] = 2;
-                     }else{
-                        array[c] = 1;
-                     }
-                  }else if(array[c] == array[z]){
-                     status = false; 
-                     break LOOP;
-                  }
-               }
+                  				if(array[c] == 0){
+                     					if(array[z] == 1){
+                        					array[c] = 2;
+                     					}else{
+                        					array[c] = 1;
+                     					}
+                  				}else if(array[c] == array[z]){
+                     					status = false; 
+                     					break LOOP;
+                  				}
+               				}
 				}
 			}
 			if(status){
