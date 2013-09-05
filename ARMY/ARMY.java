@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-
 class ARMY{
 	public static void main(String[] args) throws Exception{
 		Parser in = new Parser(System.in);
