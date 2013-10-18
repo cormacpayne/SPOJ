@@ -36,7 +36,7 @@ class CSTREET{
 		System.out.print(string);
 	}
 
-  //Prim's algorithm for minimum spanning tree
+  	//Prim's algorithm for minimum spanning tree
 	public static long mst(List<Edge>[] edges, int[] pred) {
         int n = edges.length;
         Arrays.fill(pred, -1);
