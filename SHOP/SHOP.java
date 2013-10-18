@@ -41,7 +41,7 @@ class SHOP{
 			}
 
 			int[] xValues = {1, 0, -1, 0};
-            		int[] yValues = {0, -1, 0, 1};
+            	int[] yValues = {0, -1, 0, 1};
 			PriorityQueue<Point> pq = new PriorityQueue<Point>();
 			Point current = null;
 			pq.add(new Point(startX, startY, 0));
