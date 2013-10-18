@@ -9,7 +9,6 @@ class BYTESE1{
 			int rows = in.nextInt();
 			int cols = in.nextInt();
 			int[][] grid = new int[rows+2][cols+2];
-			//int[][] sums = new int[rows+2][cols+2];
 			boolean[][] visited = new boolean[rows+2][cols+2];
 
 			for(int j = 0; j < cols+2; j++){
@@ -21,7 +20,6 @@ class BYTESE1{
 				grid[k][0] = -1;
 				for(int m = 1; m < cols+1; m++){
 					grid[k][m] = in.nextInt();
-					//sums[k][m] = Integer.MAX_VALUE;
 				}
 				grid[k][cols+1] = -1;
 			}
@@ -36,10 +34,8 @@ class BYTESE1{
 			PriorityQueue<Room> pq = new PriorityQueue<Room>();
 			Room current = null;
 			pq.add(new Room(1,1, grid[1][1]));
-			//sums[1][1] = grid[1][1];
 			while(pq.size() != 0){
 				current = pq.remove();
-				//System.out.printf("CURRENT = (%d, %d), CURRENT.DIST = %d\n", current.x, current.y, current.dist);
 				if(current.x == destinationX && current.y == destinationY){
 					break;
 				}
@@ -47,8 +43,6 @@ class BYTESE1{
 					int x = xValues[f] + current.x;
 					int y = yValues[f] + current.y;
 					if(grid[x][y] != -1){
-						//sums[x][y] = Math.min(sums[x][y], sums[current.x][current.y] + grid[x][y]);
-						//System.out.printf("SUMS[%d][%d] = %d\n", x, y, sums[x][y]);
 						if(!visited[x][y]){
 							visited[x][y] = true;
 							pq.add(new Room(x,y,current.dist+grid[x][y]));
@@ -56,7 +50,6 @@ class BYTESE1{
 					}
 				}
 			}
-			//System.out.printf("TIME = %d, SUMS[%d][%d] = %d\n", time, destinationX, destinationY, sums[destinationX][destinationY]);
 			int result = time - current.dist;
 			if(result > 0){
 				string.append("YES\n" + result + "\n");
