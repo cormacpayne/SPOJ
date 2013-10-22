@@ -1,11 +1,12 @@
 import java.io.*;
 import java.util.*;
-class ESCJAILA {
+public class ESCJAILA {
 	public static void main(String[] args)throws Exception{
 		Parser in = new Parser(System.in);
 		StringBuilder string = new StringBuilder();
 		int rows = in.nextInt();
 		int cols = in.nextInt();
+		
 		while(rows != -1 && cols != -1){
 			char[][] grid = new char[rows][cols];
 			int startX = -1;
@@ -22,7 +23,7 @@ class ESCJAILA {
 				}
 			}
 			
-			string.append(bfs(startX, startY, grid)+1 + "\n");
+			string.append(bfs(startX, startY, grid) + "\n");
 			
 			rows = in.nextInt();
 			cols = in.nextInt();
@@ -31,10 +32,12 @@ class ESCJAILA {
 	}
 	
 	public static int bfs(int startX, int startY, char[][] grid){
+		//if the starting position has no wall on at least one side, break out
 		if(startX == grid.length-1 || startX == 0 || startY == grid[0].length-1 || startY == 0){
-			return 0;
+			return 1;
 		}
 		
+		//keep track of the total distance traveled on each floor
 		int[][][] distance = new int[grid.length][grid[0].length][3];
 		for (int[][] row: distance)
 		{
@@ -46,51 +49,63 @@ class ESCJAILA {
 		
 		int[] xValues = {-1, 1, 0, 0};
 		int[] yValues = {0, 0, -1, 1};
-		int row, col, floor, currentFloor;
-		Queue<Integer> q = new LinkedList<Integer>();
-		q.add(startX);
-		q.add(startY);
-		q.add(0);
+		
+		int currentFloor;
+		Point current;
+		Queue<Point> q = new LinkedList<Point>();
+		
+		q.add(new Point(startX, startY, 0));
 		distance[startX][startY][0] = 0;
 		
 		while(!q.isEmpty()){
-			row = q.remove();
-			col = q.remove();
-			floor = q.remove();
+			current = q.remove();
 			
 			for(int i = 0; i < 4; i++){
-				int x = row + xValues[i];
-				int y = col + yValues[i];
+				int x = current.row + xValues[i];
+				int y = current.col + yValues[i];
 				
+				//if the adjacent point isn't out of bounds and isn't a wall
 				if(x >= 0 && x <= grid.length-1 && y >= 0 && y <= grid[0].length-1 && grid[x][y] != 'W'){
-					if(floor != 1 && grid[x][y] == 'D'){
+					//if the adjacent point is a door and we are on a closed floor, continue in the for loop 
+					if(current.floor != 1 && grid[x][y] == 'D'){
 						continue;
 					}
-					
+					//if the adjacent point is on the boundaries (Harry can escape), move to that point
+					//and then escape from jail, resulting in 2 moves
 					if(x == 0 || x == grid.length-1 || y == 0 || y == grid[0].length-1){
-						return distance[row][col][floor] + 1;
+						return distance[current.row][current.col][current.floor] + 2;
 					}
 						
+					//if the adjacent point is an "open-door space", switch floors
 					if(grid[x][y] == 'O'){
 						currentFloor = 1;
+					//if the adjacent point is a "close-door space", switch floors
 					}else if(grid[x][y] == 'C'){
 						currentFloor = 2;
+					//if the adjacent point is a "normal space", stay on the current floor
 					}else{
-						currentFloor = floor;
+						currentFloor = current.floor;
 					}
-					
-					if(distance[x][y][currentFloor] > distance[row][col][floor] + 1){
-						q.add(x);
-						q.add(y);
-						q.add(currentFloor);
-						distance[x][y][currentFloor] = distance[row][col][floor] + 1;
-						//System.out.printf("distance[%d][%d][%d] = %d\n", x, y, currentFloor, distance[x][y][currentFloor]);
+					//if the current distance + 1 is smaller than the adjacent point distance, set the adjacent
+					//point's distance to the current distance + 1 and add it to the queue
+					if(distance[x][y][currentFloor] > distance[current.row][current.col][current.floor] + 1){
+						q.add(new Point(x,y,currentFloor));
+						distance[x][y][currentFloor] = distance[current.row][current.col][current.floor] + 1;
 					}
 				}
 			}
-		}
-		
-		return -2;
+		}		
+		return -1;
+	}
+}
+
+class Point{
+	int row, col, floor;
+	
+	public Point(int row, int col, int floor){
+		this.row = row;
+		this.col = col;
+		this.floor = floor;
 	}
 }
 
@@ -167,4 +182,3 @@ class Parser
       return buffer[bufferPointer++];
    }
 }
-
