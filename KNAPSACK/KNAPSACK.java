@@ -41,5 +41,5 @@ class KNAPSACK {
 
 		memo[id][remainingWeight] = Math.max(val(id + 1, remainingWeight), value[id] + val(id + 1, remainingWeight - weights[id]));
 		return memo[id][remainingWeight];                      // either take the item, or move to the next and set it's value to the
-	}                                                          // corresponding memo value for future use
+	}                                                              // corresponding memo value for future use
 }
