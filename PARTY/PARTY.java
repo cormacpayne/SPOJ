@@ -35,7 +35,7 @@ class PARTY {
 
 			weights = new int[items];
 			values = new int[items];
-         dp = new int[weight + 1];
+         		dp = new int[weight + 1];
 			memo = new int[weight + 1][items + 1];
 
 			for (int[] row : memo) {
@@ -49,17 +49,17 @@ class PARTY {
 
 			int fun = -1;
 
-         for (int k = 0; k <= weight; k++) {
-            dp[k] = sack(k, 0);
-            fun = Math.max(dp[k], fun);
-         }
+		         for (int k = 0; k <= weight; k++) {
+		            dp[k] = sack(k, 0);
+		            fun = Math.max(dp[k], fun);
+		         }
 
-         for (int j = 0; j <= weight; j++) {
-            if (dp[j] == fun) {
-               string.append(j + " " + dp[j] + "\n");
-               break;
-            }
-         }
+		         for (int j = 0; j <= weight; j++) {
+		            if (dp[j] == fun) {
+		               string.append(j + " " + dp[j] + "\n");
+		               break;
+		            }
+		         }
 
 			weight = in.nextInt();
 			items = in.nextInt();
