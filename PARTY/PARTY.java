@@ -1,36 +1,70 @@
-import java.io.*;
 import java.util.*;
-class PARTY{
-	public static void main(String[] args) throws Exception{
+import java.io.*;
+
+class PARTY {
+
+	public static int weight, items;
+	public static int[] weights, values, dp;
+	public static int[][] memo;
+
+	public static int sack(int remainingWeight, int id) {
+		if (id == items || remainingWeight == 0) {
+			return 0;
+		}
+
+		if (memo[remainingWeight][id] != -1) {
+			return memo[remainingWeight][id];
+		}
+
+		if (weights[id] > remainingWeight) {
+			return sack(remainingWeight, id + 1);
+		}
+
+		memo[remainingWeight][id] = Math.max(sack(remainingWeight, id + 1), values[id] + sack(remainingWeight - weights[id], id + 1));
+		return memo[remainingWeight][id];
+	}
+
+	public static void main(String[] args) throws Exception {
 		Parser in = new Parser(System.in);
 		StringBuilder string = new StringBuilder();
-		for(;;){
-			int budget = in.nextInt();
-			int n = in.nextInt();
-			if(budget == 0 && n == 0) break;
-			int[] dp = new int[budget+1];
-			dp[0] = 1;
-			while(n-- != 0){
-				int cost = in.nextInt();
-				int fun = in.nextInt();
-				for(int i = budget-cost; i >= 0; i--){
-					if(dp[i] != 0){
-						int nfun = fun + dp[i];
-						int ncost = i + cost;
-						if(dp[ncost] < nfun) dp[ncost] = nfun;
-					}
-				}
+
+		weight = in.nextInt();
+		items = in.nextInt();
+
+		while (weight != 0 && items != 0) {
+
+			weights = new int[items];
+			values = new int[items];
+         dp = new int[weight + 1];
+			memo = new int[weight + 1][items + 1];
+
+			for (int[] row : memo) {
+				Arrays.fill(row, -1);
 			}
-			int best = -1;
-			int spent = 0;
-			for(int i = 0; i <= budget; i++){
-				if(dp[i] > best){
-					best = dp[i];
-					spent = i;
-				}
+
+			for (int i = 0; i < items; i++) {
+				weights[i] = in.nextInt();
+				values[i] = in.nextInt();
 			}
-			string.append(spent + " " + (best-1) + "\n");
+
+			int fun = -1;
+
+         for (int k = 0; k <= weight; k++) {
+            dp[k] = sack(k, 0);
+            fun = Math.max(dp[k], fun);
+         }
+
+         for (int j = 0; j <= weight; j++) {
+            if (dp[j] == fun) {
+               string.append(j + " " + dp[j] + "\n");
+               break;
+            }
+         }
+
+			weight = in.nextInt();
+			items = in.nextInt();
 		}
+
 		System.out.print(string);
 	}
 }
@@ -69,7 +103,7 @@ class Parser
    //reads in the next string
    public String next() throws Exception
    {
-      StringBuilder ret =  new StringBuilder();
+      StringBuilder ret = new StringBuilder();
       byte c = read();
       while (c <= ' ') c = read();
       do
