@@ -1,67 +1,50 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
+
 class ALIEN {
-	public static void main(String[] args)throws Exception{
+	public static void main(String[] args) throws Exception {
 		Parser in = new Parser(System.in);
 		StringBuilder string = new StringBuilder();
 		int t = in.nextInt();
-		for(int i = 0; i < t; i++){
-			int window = in.nextInt();
-			int MAX = in.nextInt();
-			int[] station = new int[window];
+
+		for (int i = 0; i < t; i++) {
+			int n = in.nextInt();
+			int max = in.nextInt();
+
 			int sum = 0;
-			int min = 101;
-			int minSum = Integer.MAX_VALUE;
-			
-			for(int j = 0; j < window; j++){
-				station[j] = in.nextInt();
-				sum += station[j];
-				min = Math.min(min, station[j]);
-			}
-			
-			if(sum <= MAX){
-				string.append(sum + " " + window + "\n");
-			}else{
-				int start = 2;
-				int end = window;
-				int mid = (start + end)/2;
-				
-				while(true){
-					sum = 0;
-					minSum = Integer.MAX_VALUE;
-					for(int k = 0; k < mid; k++){
-						sum += station[k];
+			int min = Integer.MAX_VALUE;
+			int people = 0;
+			int maxP = -1;
+
+			int index = 0;
+			int[] nums = new int[n];
+
+			for (int j = 0; j < n; j++) {
+				nums[j] = in.nextInt();
+				sum += nums[j];
+				people++;
+				if (sum > max) {
+					while (sum > max && index != j + 1) {
+						sum -= nums[index];
+						people--;
+						index++;
 					}
-					if(sum <= MAX){
-						minSum = sum;
-					}
-					for(int l = 0; l < station.length - mid; l++){
-						sum -= station[l];
-						sum += station[mid+l];
-						if(sum <= MAX){
-							minSum = Math.min(sum, minSum);
-						}
-					}
-						
-					if(start == mid || end == 2){
-						break;
-					}
-					
-					if(minSum == Integer.MAX_VALUE){
-						end = mid;
-						mid = (start+end)/2;
-					}else{
-						start = mid;
-						mid = (start+end)/2;
-					}						
-				}				
-				
-				if(mid == 2 && minSum == Integer.MAX_VALUE){
-					string.append(min + " 1\n");
-				}else{
-					string.append(minSum + " " + mid + "\n");
+
+					if (index == j + 1) sum = 0;
 				}
+
+				if (people > maxP) {
+					maxP = people;
+					min = sum;
+				} else if (people == maxP) {
+					if (min > sum) {
+						min = sum;
+					}
+				}
+				
 			}
+
+			string.append(min + " " + maxP + "\n");
 		}
 		System.out.print(string);
 	}
