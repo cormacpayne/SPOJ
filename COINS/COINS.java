@@ -1,32 +1,31 @@
 import java.util.*;
-class COINS{
 
-	public static long[] a;
+class COINS {
 
-	public static void main(String[] args){
-		Scanner in = new Scanner(System.in);
-		StringBuilder string = new StringBuilder();
-		a = new long[1000001];
-		while(in.hasNextLong()){
-			string.append(magic(in.nextLong()) + "\n");
+	public static long[] memo;
+
+	public static long solve(int n) {
+		if (n < 0) return 0;
+		if (n <= 1000000 && (memo[n] != 0 || n == 0)) return memo[n];
+		if (n <= 1000000) {
+			return memo[n] = (long)Math.max(n, solve(n / 2) + solve(n / 3) + solve(n / 4));
+		} else {
+			return (long)Math.max(n, solve(n / 2) + solve(n / 3) + solve(n / 4));
 		}
-		System.out.print(string);
 	}
 
-	public static long magic(long n){
-		if(n == 0) return 0;
-		if(n == 1) return 1;
-		if(n == 2) return 2;
-		if(n < 1000001 && a[(int)n] != 0) return a[(int)n];
-		else{
-			long s = magic(n/2) + magic(n/3) + magic(n/4);
-			if(s > n){
-				if(n < 1000001) a[(int)n] = s;
-				return s;
-			}else{
-				if(n < 1000001) a[(int)n] = n;
-				return n;
-			}
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		StringBuilder string = new StringBuilder();
+		memo = new long[1000001];
+		memo[0] = 0;
+		memo[1] = 1;
+		memo[2] = 2;
+		memo[3] = 3;
+		while (in.hasNext()) {
+			int n = in.nextInt();
+			string.append(solve(n) + "\n");
 		}
+		System.out.print(string);
 	}
 }
